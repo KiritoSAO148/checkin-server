@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* CSS để định dạng layout */
+      body {
+        font-family: 'Open Sans', sans-serif;
+        padding: 20px;
+        /* margin: 0 auto; */
+        text-align: center;
+      }
+
+      .print-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        border: 2px solid #000;
+        /* margin-top: 40px; */
+        /* padding: 0 20px;  */
+        width: 264.57px;
+        height: 188.98px;
+      }
+
+      .name-field {
+        font-size: 20.1283px;
+        font-weight: bold;
+      }
+
+      .school-field {
+        font-size: 14.9296px;
+        padding: 0 40px;
+      }
+
+      .title-field {
+        font-size: 19.0619px;
+        font-weight: bold;
+      }
+
+      /* Định dạng riêng khi in */
+      @media print {
+        body {
+          padding: 0;
+        }
+
+        .print-container {
+          border: none;
+          width: 100%;
+        }
+
+        .name-field {
+          /* font-size: 32px; */
+        }
+
+        .school-field {
+          /* font-size: 28px; */
+        }
+
+        /* Loại bỏ tiêu đề và chân trang */
+        @page {
+          margin: 0;
+          /* Loại bỏ lề để tránh thêm thông tin phụ */
+        }
+
+        body {
+          margin: 0;
+          /* Đảm bảo không có khoảng cách khi in */
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="print-container">
+      <div class="name-field" id="nameToPrint">Momin Jamil</div>
+      <div class="school-field" id="schoolToPrint">
+        Harman/Becker Automotive Systems GmbH, Germany
+      </div>
+      <div class="title-field" id="titleToPrint">TPC Members</div>
+    </div>
+
+    <br />
+    <button onclick="printName()">In Thông Tin</button>
+
+    <script>
+      function printName() {
+        // Lấy nội dung gốc của trang
+        const originalContent = document.body.innerHTML;
+
+        // Lấy nội dung HTML của phần cần in
+        const printContent =
+          document.querySelector('.print-container').outerHTML;
+
+        // Thay thế toàn bộ nội dung trang chỉ với phần cần in
+        document.body.innerHTML = printContent;
+
+        // Tự động in nội dung
+        window.print();
+
+        // Khôi phục lại nội dung trang ban đầu sau khi in
+        document.body.innerHTML = originalContent;
+      }
+    </script>
+  </body>
+</html>

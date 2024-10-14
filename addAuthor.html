@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Print Author Info</title>
+  </head>
+  <body>
+    <h1>Print Author Information</h1>
+    <form id="authorForm">
+      <input type="text" id="author_name" placeholder="Author Name" required />
+      <input type="text" id="affiliation" placeholder="Affiliation" required />
+      <input type="email" id="email" placeholder="Email" />
+      <input type="text" id="author_role" placeholder="Role" />
+      <input type="text" id="type" placeholder="Type" required />
+      <input type="text" id="position" placeholder="Position" required />
+      <button type="submit">Create Author & Print</button>
+    </form>
+    <script>
+      import { ipcRenderer } from 'electron';
+
+      document
+        .getElementById('authorForm')
+        .addEventListener('submit', async (event) => {
+          event.preventDefault();
+
+          try {
+            const response = await fetch(
+              'http://127.0.0.1:3000/api/v1/authors',
+              {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(authorData),
+              },
+            );
+
+            const data = await response.json();
+            console.log(data);
+
+            ipcRenderer.send('print-author', { name, birthYear });
+          } catch (error) {
+            console.error('Error:', error);
+          }
+        });
+
+      document
+        .getElementById('print-form')
+        .addEventListener('submit', function (event) {
+          event.preventDefault();
+          const name = document.getElementById('name').value;
+          const birthYear = document.getElementById('birthYear').value;
+
+          ipcRenderer.send('print-birthday', { name, birthYear });
+        });
+
+      ipcRenderer.on('print-status', (event, message) => {
+        document.getElementById('status').innerText = message;
+      });
+    </script>
+    <!-- Tạo file renderer.js sau -->
+  </body>
+</html>
