@@ -45,7 +45,7 @@ exports.getPapersByAuthorId = async (req, res) => {
     // Lấy danh sách paper IDs từ bảng authors_papers theo author_id
     const authorPapers = await AuthorPaper.findAll({
       where: { id_authors: authorId },
-      attributes: ['id_papers', 'num_of_gifts'], // Lấy ra id_papers và num_of_gifts từ bảng authorPaper
+      attributes: ['id_papers', 'num_of_gifts', 'note'], // Lấy ra id_papers và num_of_gifts từ bảng authorPaper
     });
 
     const paperIds = authorPapers.map((ap) => ap.id_papers);
@@ -62,7 +62,7 @@ exports.getPapersByAuthorId = async (req, res) => {
       where: {
         id_papers: paperIds,
       },
-      attributes: ['id_papers', 'num_of_gifts'], // Lấy id_papers và num_of_gifts cho từng tác giả
+      attributes: ['id_papers', 'num_of_gifts', 'note'], // Lấy id_papers và num_of_gifts cho từng tác giả
     });
 
     // Tính toán số lượng quà còn lại cho mỗi bài báo
@@ -78,6 +78,8 @@ exports.getPapersByAuthorId = async (req, res) => {
       );
       const numOfGifts = authorPaperEntry ? authorPaperEntry.num_of_gifts : 0;
 
+      const note = authorPaperEntry ? authorPaperEntry.note : null;
+
       // Số quà còn lại cho bài báo này
       const remainingGifts = paper.num_of_registers - totalGiftsTaken;
 
@@ -90,6 +92,7 @@ exports.getPapersByAuthorId = async (req, res) => {
         num_of_registers: paper.num_of_registers,
         num_of_gifts: numOfGifts,
         remaining_gifts: remainingGifts,
+        note: note,
       };
     });
 
@@ -173,7 +176,6 @@ exports.getAuthorsWithGiftsForPaper = async (req, res) => {
         'is_registered',
         'paid',
         'num_of_gifts',
-        'note',
       ],
       include: [
         {
