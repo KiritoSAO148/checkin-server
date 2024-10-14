@@ -173,6 +173,7 @@ exports.getAuthorsWithGiftsForPaper = async (req, res) => {
         'is_registered',
         'paid',
         'num_of_gifts',
+        'note',
       ],
       include: [
         {

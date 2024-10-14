@@ -69,6 +69,12 @@ const AuthorPaper = sequelize.define(
       type: DataTypes.INTEGER,
       defaultValue: 0,
     },
+    note:{
+      type: DataTypes.STRING(255),
+      allowNull: true,
+      charset: 'utf8mb4',
+      collate: 'utf8mb4_unicode_ci',
+    }
   },
   {
     tableName: 'authors_papers',
