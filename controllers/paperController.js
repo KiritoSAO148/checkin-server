@@ -207,3 +207,42 @@ exports.deletePaper = async (req, res) => {
     });
   }
 };
+
+exports.getTotalCheckedInPapers = async (req, res) => {
+  try {
+    // Tìm tất cả các bài báo có ít nhất một tác giả đã checked in
+    const checkedInPapers = await Paper.findAll({
+      include: [
+        {
+          model: AuthorPaper,
+          include: [
+            {
+              model: Author,
+              where: { checked_in: true }, // Chỉ tính các tác giả đã checked in
+              required: true, // Đảm bảo chỉ lấy những bài báo có ít nhất một tác giả đã checked in
+            },
+          ],
+          required: true,
+        },
+      ],
+      attributes: ['id'], // Chỉ cần lấy ID của các bài báo để đếm
+      distinct: true, // Loại bỏ các bản sao
+    });
+
+    // Đếm tổng số bài báo được checked in
+    const totalCheckedInPapers = checkedInPapers.length;
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        totalCheckedInPapers,
+      },
+    });
+  } catch (err) {
+    console.error(err); // Log lỗi để giúp việc gỡ lỗi
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to fetch total number of checked-in papers.',
+    });
+  }
+};

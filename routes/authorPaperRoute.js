@@ -3,6 +3,7 @@ const authorPaperController = require('../controllers/authorPaperController.js')
 
 const router = express.Router();
 
+router.get('/total-gifts-taken', authorPaperController.getTotalGiftsTaken);
 router.get('/:authorId', authorPaperController.getPapersByAuthorId);
 router.get(
   '/authors/:paperId',

@@ -171,3 +171,27 @@ exports.deleteAuthor = async (req, res) => {
     });
   }
 };
+
+exports.getTotalCheckedInAuthors = async (req, res) => {
+  try {
+    // Tính tổng số lượng các author đã check in
+    const totalCheckedInAuthors = await Author.count({
+      where: {
+        checked_in: true,
+      },
+    });
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        totalCheckedInAuthors,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to fetch total checked-in authors',
+      error: err.message,
+    });
+  }
+};

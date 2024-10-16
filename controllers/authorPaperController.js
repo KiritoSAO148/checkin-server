@@ -217,3 +217,23 @@ exports.getAuthorsWithGiftsForPaper = async (req, res) => {
     });
   }
 };
+
+exports.getTotalGiftsTaken = async (req, res) => {
+  try {
+    // Tính tổng số quà đã được lấy từ bảng AuthorPaper
+    const totalGiftsTaken = await AuthorPaper.sum('num_of_gifts');
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        totalGiftsTaken,
+      },
+    });
+  } catch (err) {
+    console.error(err); // Log lỗi để giúp việc gỡ lỗi
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to fetch total number of gifts taken.',
+    });
+  }
+};
