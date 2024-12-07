@@ -1,4 +1,6 @@
 const Author = require('../models/authorModel.js');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 exports.getAllAuthors = async (req, res) => {
   try {
@@ -191,6 +193,100 @@ exports.getTotalCheckedInAuthors = async (req, res) => {
     res.status(500).json({
       status: 'error',
       message: 'Failed to fetch total checked-in authors',
+      error: err.message,
+    });
+  }
+};
+
+// exports.login = async (req, res) => {
+//   try {
+//     const { username, password } = req.body;
+
+//     // Kiểm tra xem author có tồn tại không
+//     const author = await Author.findOne({ where: { username } });
+//     if (!author) {
+//       return res.status(404).json({
+//         status: 'fail',
+//         message: 'Author not found',
+//       });
+//     }
+
+//     // Kiểm tra mật khẩu
+//     const isPasswordValid = await bcrypt.compare(password, author.password);
+//     if (!isPasswordValid) {
+//       return res.status(401).json({
+//         status: 'fail',
+//         message: 'Incorrect password',
+//       });
+//     }
+
+//     // Tạo token JWT
+//     const token = jwt.sign(
+//       { id: author.id, role: author.author_role },
+//       process.env.JWT_SECRET,
+//       { expiresIn: '1h' },
+//     );
+
+//     res.status(200).json({
+//       status: 'success',
+//       data: {
+//         token,
+//         author_id: author.id,
+//         author_name: author.author_name,
+//         role: author.author_role,
+//       },
+//     });
+//   } catch (err) {
+//     res.status(500).json({
+//       status: 'error',
+//       message: 'Login failed',
+//       error: err.message,
+//     });
+//   }
+// };
+
+exports.login = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    // Kiểm tra xem author có tồn tại không
+    const author = await Author.findOne({ where: { username } });
+    if (!author) {
+      return res.status(404).json({
+        status: 'fail',
+        message: 'Author not found',
+      });
+    }
+
+    // Kiểm tra mật khẩu (so sánh trực tiếp, không mã hóa)
+    if (author.password !== password) {
+      return res.status(401).json({
+        status: 'fail',
+        message: 'Incorrect password',
+      });
+    }
+
+    // Tạo token JWT (JWT sẽ mã hóa dữ liệu của người dùng như id và role)
+    const token = jwt.sign(
+      { id: author.id, role: author.author_role },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' },
+    );
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Login successful',
+      data: {
+        token,
+        author_id: author.id,
+        author_name: author.author_name,
+        role: author.author_role,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Login failed',
       error: err.message,
     });
   }

@@ -45,6 +45,15 @@ const Author = sequelize.define(
       type: DataTypes.STRING(1),
       defaultValue: 'A',
     },
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
 
     checked_in: {
       type: DataTypes.BOOLEAN,
