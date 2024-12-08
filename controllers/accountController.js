@@ -80,12 +80,6 @@ exports.login = async (req, res) => {
         message: 'Incorrect password',
       });
     }
-    // Tạo token JWT (JWT sẽ mã hóa dữ liệu của người dùng như id và role)
-    const token = jwt.sign(
-      { id: account.id, role: account.a_role },
-      process.env.JWT_SECRET,
-      { expiresIn: '1h' },
-    );
 
     const author = await Author.findOne({ where: { email: username } });
     if (!author) {
@@ -94,6 +88,13 @@ exports.login = async (req, res) => {
         message: 'Author not found',
       });
     }
+
+    // Tạo token JWT (JWT sẽ mã hóa dữ liệu của người dùng như id và role)
+    const token = jwt.sign(
+      { id: author.id, role: account.a_role },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' },
+    );
 
     res.status(200).json({
       status: 'success',

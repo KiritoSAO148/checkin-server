@@ -1,8 +1,9 @@
 const jwt = require('jsonwebtoken');
 
-const authMiddleware = (role) => {
+const authMiddleware = () => {
   return (req, res, next) => {
     const token = req.headers['authorization']?.split(' ')[1];
+    console.log('Token: ', token);
 
     if (!token) {
       return res.status(403).json({
@@ -20,12 +21,12 @@ const authMiddleware = (role) => {
       }
 
       // Kiểm tra quyền truy cập theo role
-      if (role && decoded.role !== role) {
-        return res.status(403).json({
-          status: 'fail',
-          message: 'Access denied',
-        });
-      }
+      // if (role && decoded.role !== role) {
+      //   return res.status(403).json({
+      //     status: 'fail',
+      //     message: 'Access denied',
+      //   });
+      // }
 
       req.user = decoded;
       next();
