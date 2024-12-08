@@ -3,6 +3,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 
 const authorRouter = require('./routes/authorRoute');
+const accountRouter = require('./routes/accountRoute');
 const paperRouter = require('./routes/paperRoute');
 const authorPaperRouter = require('./routes/authorPaperRoute');
 const invoiceAuthorRouter = require('./routes/invoiceAuthorRoute');
@@ -25,6 +26,7 @@ app.use((req, res, next) => {
 
 // 3) ROUTES
 app.use('/api/v1/authors', authorRouter);
+app.use('/api/v1/accounts', accountRouter);
 app.use('/api/v1/papers', paperRouter);
 app.use('/api/v1/authors-papers', authorPaperRouter);
 app.use('/api/v1/invoices-authors', invoiceAuthorRouter);

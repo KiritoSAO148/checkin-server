@@ -245,49 +245,49 @@ exports.getTotalCheckedInAuthors = async (req, res) => {
 //   }
 // };
 
-exports.login = async (req, res) => {
-  try {
-    const { username, password } = req.body;
+// exports.login = async (req, res) => {
+//   try {
+//     const { username, password } = req.body;
 
-    // Kiểm tra xem author có tồn tại không
-    const author = await Author.findOne({ where: { username } });
-    if (!author) {
-      return res.status(404).json({
-        status: 'fail',
-        message: 'Author not found',
-      });
-    }
+//     // Kiểm tra xem author có tồn tại không
+//     const author = await Author.findOne({ where: { username } });
+//     if (!author) {
+//       return res.status(404).json({
+//         status: 'fail',
+//         message: 'Author not found',
+//       });
+//     }
 
-    // Kiểm tra mật khẩu (so sánh trực tiếp, không mã hóa)
-    if (author.password !== password) {
-      return res.status(401).json({
-        status: 'fail',
-        message: 'Incorrect password',
-      });
-    }
+//     // Kiểm tra mật khẩu (so sánh trực tiếp, không mã hóa)
+//     if (author.password !== password) {
+//       return res.status(401).json({
+//         status: 'fail',
+//         message: 'Incorrect password',
+//       });
+//     }
 
-    // Tạo token JWT (JWT sẽ mã hóa dữ liệu của người dùng như id và role)
-    const token = jwt.sign(
-      { id: author.id, role: author.author_role },
-      process.env.JWT_SECRET,
-      { expiresIn: '1h' },
-    );
+//     // Tạo token JWT (JWT sẽ mã hóa dữ liệu của người dùng như id và role)
+//     const token = jwt.sign(
+//       { id: author.id, role: author.author_role },
+//       process.env.JWT_SECRET,
+//       { expiresIn: '1h' },
+//     );
 
-    res.status(200).json({
-      status: 'success',
-      message: 'Login successful',
-      data: {
-        token,
-        author_id: author.id,
-        author_name: author.author_name,
-        role: author.author_role,
-      },
-    });
-  } catch (err) {
-    res.status(500).json({
-      status: 'error',
-      message: 'Login failed',
-      error: err.message,
-    });
-  }
-};
+//     res.status(200).json({
+//       status: 'success',
+//       message: 'Login successful',
+//       data: {
+//         token,
+//         author_id: author.id,
+//         author_name: author.author_name,
+//         role: author.author_role,
+//       },
+//     });
+//   } catch (err) {
+//     res.status(500).json({
+//       status: 'error',
+//       message: 'Login failed',
+//       error: err.message,
+//     });
+//   }
+// };

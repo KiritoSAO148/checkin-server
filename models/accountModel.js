@@ -21,7 +21,7 @@ sequelize
   });
 
 // Define the author model
-const Author = sequelize.define(
+const Account = sequelize.define(
   'Author',
   {
     id: {
@@ -30,35 +30,22 @@ const Author = sequelize.define(
       allowNull: false,
       primaryKey: true,
     },
-    author_name: {
+    a_username: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    a_password: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    affiliation: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    email: {
-      type: DataTypes.STRING,
-    },
-    author_role: {
+    a_role: {
       type: DataTypes.STRING(1),
       defaultValue: 'A',
     },
-
-    checked_in: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-    },
-    type: {
-      type: DataTypes.STRING,
-    },
-    position: {
-      type: DataTypes.STRING,
-    },
   },
   {
-    tableName: 'authors',
+    tableName: 'accounts',
     timestamps: false, // disable createdAt and updatedAt fields
   },
 );
@@ -66,10 +53,10 @@ const Author = sequelize.define(
 sequelize
   .sync()
   .then(() => {
-    console.log('Author table created successfully!');
+    console.log('Account table created successfully!');
   })
   .catch((error) => {
     console.error('Unable to create table : ', error);
   });
 
-module.exports = Author;
+module.exports = Account;
